@@ -1,9 +1,9 @@
-import "phaser";
-import Sky from "../assets/sky.png"
-import Ground from "../assets/platform.png"
-import Dude from "../assets/dude.png"
-import Star from '../assets/star.png'
-import Bomb from '../assets/bomb.png'
+import 'phaser';
+import Sky from '../assets/sky.png';
+import Ground from '../assets/platform.png';
+import Dude from '../assets/dude.png';
+import Star from '../assets/star.png';
+import Bomb from '../assets/bomb.png';
 
 var player;
 var stars;
@@ -20,14 +20,14 @@ export default class Gamescene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("sky", Sky);
-        this.load.image("ground", Ground);
-        this.load.image("star", Star);
-        this.load.image("bomb", Bomb);
-        this.load.spritesheet("dude", Dude, { frameWidth: 32, frameHeight: 48 });
+        this.load.image('sky', Sky);
+        this.load.image('ground', Ground);
+        this.load.image('star', Star);
+        this.load.image('bomb', Bomb);
+        this.load.spritesheet('dude', Dude, { frameWidth: 32, frameHeight: 48 });
     }
 
-    create () {
+    create() {
         this.add.image(400, 300, 'sky');
 
         scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -45,11 +45,9 @@ export default class Gamescene extends Phaser.Scene {
             repeat: 11,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
-        
+
         stars.children.iterate(function (child) {
-        
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-        
         });
 
         this.physics.add.collider(stars, platforms);
@@ -77,7 +75,7 @@ export default class Gamescene extends Phaser.Scene {
 
         this.anims.create({
             key: 'turn',
-            frames: [ { key: 'dude', frame: 4 } ],
+            frames: [{ key: 'dude', frame: 4 }],
             frameRate: 20
         });
 
@@ -92,41 +90,35 @@ export default class Gamescene extends Phaser.Scene {
     update() {
         cursors = this.input.keyboard.createCursorKeys();
 
-        if (cursors.left.isDown)
-        {
+        if (cursors.left.isDown) {
             player.setVelocityX(-160);
 
             player.anims.play('left', true);
         }
-        else if (cursors.right.isDown)
-        {
+        else if (cursors.right.isDown) {
             player.setVelocityX(160);
 
             player.anims.play('right', true);
         }
-        else
-        {
+        else {
             player.setVelocityX(0);
 
             player.anims.play('turn');
         }
 
-        if (cursors.up.isDown && player.body.touching.down)
-        {
+        if (cursors.up.isDown && player.body.touching.down) {
             player.setVelocityY(-330);
         }
     }
 }
 
-function collectStar (player, star)
-{
+function collectStar(player, star) {
     star.disableBody(true, true);
 
     score += 10;
     scoreText.setText('Score: ' + score);
 
-    if (stars.countActive(true) === 0)
-    {
+    if (stars.countActive(true) === 0) {
         stars.children.iterate(function (child) {
 
             child.enableBody(true, child.x, 0, true, true);
@@ -143,13 +135,9 @@ function collectStar (player, star)
     }
 }
 
-function hitBomb (player, bomb)
-{
+function hitBomb(player, bomb) {
     this.physics.pause();
-
     player.setTint(0xff0000);
-
     player.anims.play('turn');
-
     gameOver = true;
 }
